@@ -218,11 +218,11 @@
         <div class="input-section">
             <h2>Chỉnh sửa số thẻ YY Point</h2>
 
-            <input type="text" id="cardNumberInput" class="card-number-input" placeholder="1-710700-12345-6789"
+            <input type="text" id="cardNumberInput" class="card-number-input" placeholder="Ex: 1-710700-12345-6789"
                 value="1-710700-12345-6789" maxlength="19">
             <br>
             <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                <button class="update-btn" onclick="updateCardNumber()">🔄 Cập nhật thẻ</button>
+                <!-- <button class="update-btn" onclick="updateCardNumber()">🔄 Cập nhật thẻ</button> -->
                 <button class="update-btn" onclick="toggleInput()">👁️ Ẩn/Hiện Input</button>
                 <button class="update-btn" onclick="downloadImage()"> 📸 Tải ảnh</button>
             </div>
@@ -296,7 +296,7 @@
             const display = document.getElementById('displayCardNumber');
 
             if (input.value.trim() === '') {
-                alert('Vui lòng nhập số thẻ!');
+                display.innerHTML = '';
                 return;
             }
 
@@ -309,6 +309,9 @@
                 display.style.transform = 'scale(1)';
             }, 300);
         }
+
+        // Tự động cập nhật số thẻ khi input thay đổi
+        document.getElementById('cardNumberInput').addEventListener('input', updateCardNumber);
 
         function applyPositionChanges() {
             const overlay = document.getElementById('displayCardNumber');
