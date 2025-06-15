@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fleet Card Editor</title>
     <style>
-        
-        
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -23,7 +22,7 @@
             background: white;
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             max-width: 700px;
             width: 100%;
         }
@@ -74,7 +73,7 @@
 
         .update-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .fleet-card {
@@ -84,7 +83,7 @@
             position: relative;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             background-image: url('./card.jpg');
             background-size: cover;
             background-position: center;
@@ -201,45 +200,42 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="instruction">
             <h3>🎯 Hướng dẫn sử dụng</h3>
-            
+
             1. Nhập số thẻ mới<br>
             2. Ấn `Cập nhật thẻ` <br>
-            3. Kéo thả vùng số thẻ để điều chỉnh vị trí</p>
+            3. Kéo thả vùng số thẻ để điều chỉnh vị trí
         </div>
         <div class="instruction" style="background: #fff3cd; border-left-color: #ffc107;">
-    <h3 style="color: #b26a00;">⚠️ Lưu ý</h3>
-    <p>Hãy <strong>ẩn phần nhập số thẻ</strong> trước khi chụp ảnh để đảm bảo hình ảnh chỉ chứa duy nhất phần thẻ. Điều này giúp tránh gây nhiễu dữ liệu khi có 2 vị trí chứa số thẻ với cùng định dạng.</p>
-</div>
+            <h3 style="color: #b26a00;">⚠️ Lưu ý</h3>
+            <p>Hãy <strong>ẩn phần nhập số thẻ</strong> trước khi chụp ảnh để đảm bảo hình ảnh chỉ chứa duy nhất phần
+                thẻ. Điều này giúp tránh gây nhiễu dữ liệu khi có 2 vị trí chứa số thẻ với cùng định dạng.</p>
+        </div>
         <div class="input-section">
             <h2>Chỉnh sửa số thẻ YY Point</h2>
-            
-            <input 
-                type="text" 
-                id="cardNumberInput" 
-                class="card-number-input" 
-                placeholder="1-710700-12345-6789"
-                value="1-710700-12345-6789"
-                maxlength="19"
-            >
+
+            <input type="text" id="cardNumberInput" class="card-number-input" placeholder="1-710700-12345-6789"
+                value="1-710700-12345-6789" maxlength="19">
             <br>
             <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <button class="update-btn" onclick="updateCardNumber()">🔄 Cập nhật thẻ</button>
-        <button class="update-btn" onclick="toggleInput()">👁️ Ẩn/Hiện Input</button>
-    </div>
+                <button class="update-btn" onclick="updateCardNumber()">🔄 Cập nhật thẻ</button>
+                <button class="update-btn" onclick="toggleInput()">👁️ Ẩn/Hiện Input</button>
+                <button class="update-btn" onclick="downloadImage()"> 📸 Tải ảnh</button>
+            </div>
         </div>
 
         <div class="position-controls" id="positionControls" style="display: none;">
             <h3>🎛️ Điều chỉnh vị trí số thẻ</h3>
-            
+
             <div class="control-group">
                 <label for="positionX">Vị trí X (px):</label>
                 <input type="number" id="positionX" class="position-input" value="90" min="0" max="500">
             </div>
-            
+
             <div class="control-group">
                 <label for="positionY">Vị trí Y (px):</label>
                 <input type="number" id="positionY" class="position-input" value="171" min="0" max="300">
@@ -255,6 +251,8 @@
         </div>
     </div>
 
+    <!-- Add html2canvas CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
         let isDragging = false;
         let dragOffset = { x: 0, y: 0 };
@@ -265,16 +263,16 @@
         }
 
         // Định dạng số thẻ khi người dùng nhập
-        document.getElementById('cardNumberInput').addEventListener('input', function(e) {
+        document.getElementById('cardNumberInput').addEventListener('input', function (e) {
             let value = e.target.value.replace(/[^0-9]/g, '');
-            
+
             if (value.length > 0) {
                 let formatted = '';
                 if (value.length >= 1) formatted += value.substring(0, 1);
                 if (value.length >= 2) formatted += '-' + value.substring(1, 7);
                 if (value.length >= 8) formatted += '-' + value.substring(7, 12);
                 if (value.length >= 13) formatted += '-' + value.substring(12, 16);
-                
+
                 e.target.value = formatted;
             }
         });
@@ -296,14 +294,14 @@
         function updateCardNumber() {
             const input = document.getElementById('cardNumberInput');
             const display = document.getElementById('displayCardNumber');
-            
+
             if (input.value.trim() === '') {
                 alert('Vui lòng nhập số thẻ!');
                 return;
             }
-            
+
             display.innerHTML = createCardNumberHTML(input.value);
-            
+
             // Hiệu ứng flash khi cập nhật
             display.style.transform = 'scale(1.1)';
             display.style.transition = 'transform 0.3s';
@@ -316,25 +314,46 @@
             const overlay = document.getElementById('displayCardNumber');
             const posX = document.getElementById('positionX').value;
             const posY = document.getElementById('positionY').value;
-            
+
             overlay.style.left = posX + 'px';
             overlay.style.top = posY + 'px';
-            
+
             // Hiệu ứng xác nhận
             overlay.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 overlay.style.transform = 'scale(1)';
             }, 200);
         }
-// hide / show input
+        // hide / show input
         function toggleInput() {
-    const input = document.getElementById('cardNumberInput');
-    if (input.style.display === 'none') {
-        input.style.display = 'inline-block';
-    } else {
-        input.style.display = 'none';
-    }
-}
+            const input = document.getElementById('cardNumberInput');
+            if (input.style.display === 'none') {
+                input.style.display = 'inline-block';
+            } else {
+                input.style.display = 'none';
+            }
+        }
+
+        // Tải ảnh thẻ với scale 2
+        function downloadImage() {
+            const card = document.getElementById('fleetCard');
+            // Tạo canvas mới với padding 30px và scale 2
+            html2canvas(card, { scale: 2 }).then(canvas => {
+                const padding = 30 * 2; // scale padding
+                const paddedCanvas = document.createElement('canvas');
+                paddedCanvas.width = canvas.width + padding * 2;
+                paddedCanvas.height = canvas.height + padding * 2;
+                const ctx = paddedCanvas.getContext('2d');
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, paddedCanvas.width, paddedCanvas.height);
+                ctx.drawImage(canvas, padding, padding);
+
+                const link = document.createElement('a');
+                link.href = paddedCanvas.toDataURL('image/png');
+                link.download = 'fleet_card.png';
+                link.click();
+            });
+        }
 
 
         // Kéo thả functionality
@@ -349,43 +368,43 @@
             function startDrag(e) {
                 isDragging = true;
                 overlay.classList.add('dragging');
-                
+
                 const rect = overlay.getBoundingClientRect();
                 const cardRect = card.getBoundingClientRect();
-                
+
                 dragOffset.x = e.clientX - rect.left;
                 dragOffset.y = e.clientY - rect.top;
-                
+
                 e.preventDefault();
             }
 
             function drag(e) {
                 if (!isDragging) return;
-                
+
                 const cardRect = card.getBoundingClientRect();
                 const newX = e.clientX - cardRect.left - dragOffset.x;
                 const newY = e.clientY - cardRect.top - dragOffset.y;
-                
+
                 // Giới hạn trong boundaries của thẻ
                 const maxX = card.offsetWidth - overlay.offsetWidth;
                 const maxY = card.offsetHeight - overlay.offsetHeight;
-                
+
                 const clampedX = Math.max(0, Math.min(newX, maxX));
                 const clampedY = Math.max(0, Math.min(newY, maxY));
-                
+
                 overlay.style.left = clampedX + 'px';
                 overlay.style.top = clampedY + 'px';
-                
+
                 // Cập nhật values trong controls
                 document.getElementById('positionX').value = Math.round(clampedX);
                 document.getElementById('positionY').value = Math.round(clampedY);
-                
+
                 e.preventDefault();
             }
 
             function endDrag(e) {
                 if (!isDragging) return;
-                
+
                 isDragging = false;
                 overlay.classList.remove('dragging');
             }
@@ -397,27 +416,28 @@
         });
 
         // Initialize khi trang load
-        window.onload = function() {
+        window.onload = function () {
             document.getElementById('cardNumberInput').focus();
             updateCardNumber(); // Hiển thị số thẻ mặc định
             initDragAndDrop(); // Khởi tạo kéo thả
         };
 
         // Thêm hiệu ứng hover cho thẻ
-        document.getElementById('fleetCard').addEventListener('mouseenter', function() {
+        document.getElementById('fleetCard').addEventListener('mouseenter', function () {
             if (!isDragging) {
                 this.style.transform = 'scale(1.02)';
                 this.style.transition = 'transform 0.3s ease';
             }
         });
 
-        document.getElementById('fleetCard').addEventListener('mouseleave', function() {
+        document.getElementById('fleetCard').addEventListener('mouseleave', function () {
             if (!isDragging) {
                 this.style.transform = 'scale(1)';
             }
         });
 
-        
+
     </script>
 </body>
+
 </html>
